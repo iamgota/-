@@ -1,0 +1,84 @@
+{
+    "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+    "name": "Lughat Al-Arab",
+    "patterns": [
+        {
+            "include": "#comments"
+        },
+        {
+            "include": "#keywords"
+        },
+        {
+            "include": "#strings"
+        },
+        {
+            "include": "#numbers"
+        },
+        {
+            "include": "#types"
+        }
+    ],
+    "repository": {
+        "comments": {
+            "patterns": [
+                {
+                    "name": "comment.line.double-slash.lughat",
+                    "match": "//.*$"
+                },
+                {
+                    "name": "comment.block.lughat",
+                    "begin": "/\\*",
+                    "end": "\\*/"
+                }
+            ]
+        },
+        "keywords": {
+            "patterns": [
+                {
+                    "name": "keyword.control.lughat",
+                    "match": "\\b(اذا|واال|واذا|بينما|لكل|كرر|من|حتى|توقف|تابع|حاول|التقط|اخيرا|ارمي|استورد|صدر|ارجع)\\b"
+                },
+                {
+                    "name": "keyword.declaration.lughat",
+                    "match": "\\b(دالة|صنف|متغير|ثابت|جديد|يرث)\\b"
+                },
+                {
+                    "name": "variable.language.this.lughat",
+                    "match": "\\b(هذا)\\b"
+                },
+                {
+                    "name": "constant.language.boolean.lughat",
+                    "match": "\\b(صح|خطا|فارغ)\\b"
+                },
+                {
+                    "name": "support.function.lughat",
+                    "match": "\\b(اطبع|اقرا)\\b"
+                }
+            ]
+        },
+        "types": {
+            "patterns": [
+                {
+                    "name": "support.type.lughat",
+                    "match": "\\b(عدد|نص|قائمة|قاموس)\\b"
+                }
+            ]
+        },
+        "strings": {
+            "name": "string.quoted.double.lughat",
+            "begin": "\"",
+            "end": "\"",
+            "patterns": [
+                {
+                    "name": "constant.character.escape.lughat",
+                    "match": "\\\\."
+                }
+            ]
+        },
+        "numbers": {
+            "name": "constant.numeric.lughat",
+            "match": "\\b\\d+(\\.\\d+)?\\b"
+        }
+    },
+    "scopeName": "source.lughat"
+}

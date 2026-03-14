@@ -1,0 +1,42 @@
+{
+    "name": "lughat-al-arab",
+    "displayName": "Lughat Al-Arab",
+    "description": "Soporte para el lenguaje de programación Lughat Al-Arab",
+    "publisher": "lughat-al-arab-team",
+    "version": "1.0.0",
+    "engines": {
+        "vscode": "^1.80.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [
+            {
+                "id": "lughat",
+                "aliases": [
+                    "Lughat Al-Arab",
+                    "lughat"
+                ],
+                "extensions": [
+                    ".عرب",
+                    ".ه",
+                    ".heba"
+                ],
+                "configuration": "./language-configuration.json"
+            }
+        ],
+        "configurationDefaults": {
+            "[lughat]": {
+                "editor.bidi": "auto"
+            }
+        },
+        "grammars": [
+            {
+                "language": "lughat",
+                "scopeName": "source.lughat",
+                "path": "./syntaxes/lughat-al-arab.tmLanguage.json"
+            }
+        ]
+    }
+}

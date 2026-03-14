@@ -1,0 +1,23 @@
+.......E.E
+======================================================================
+ERROR: test_bucle_repetir (test_parser.TestParser.test_bucle_repetir)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/bode/Documents/Dev/heba/lughat-al-arab/tests/test_parser.py", line 34, in test_bucle_repetir
+    self.assertIsInstance(ast.declaraciones[0], NodoBucle_Repetir)
+                          ^^^^^^^^^^^^^^^^^
+AttributeError: 'NodoPrograma' object has no attribute 'declaraciones'
+
+======================================================================
+ERROR: test_operaciones_binarias (test_parser.TestParser.test_operaciones_binarias)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/bode/Documents/Dev/heba/lughat-al-arab/tests/test_parser.py", line 26, in test_operaciones_binarias
+    self.assertIsInstance(expr.derecho, NodoOpBinaria)
+                          ^^^^^^^^^^^^
+AttributeError: 'NodoOpBinaria' object has no attribute 'derecho'. Did you mean: 'derecha'?
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.004s
+
+FAILED (errors=2)

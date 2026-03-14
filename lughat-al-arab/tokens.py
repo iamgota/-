@@ -9,6 +9,8 @@ class TokenKind(Enum):
     KW_BAYNAMA = "‫بينما"
     KW_LIKULL = "‫لكل"
     KW_KARRIR = "‫كرر"
+    KW_MIN = "‫من"
+    KW_HATTA = "‫حتى"
     KW_TAWAQQAF = "‫توقف"
     KW_TABI = "‫تابع"
     
@@ -114,6 +116,8 @@ KEYWORDS_MAP = {
     "بينما": TokenKind.KW_BAYNAMA,
     "لكل": TokenKind.KW_LIKULL,
     "كرر": TokenKind.KW_KARRIR,
+    "من": TokenKind.KW_MIN,
+    "حتى": TokenKind.KW_HATTA,
     "توقف": TokenKind.KW_TAWAQQAF,
     "تابع": TokenKind.KW_TABI,
     "دالة": TokenKind.KW_DALA,

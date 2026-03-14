@@ -73,6 +73,21 @@ class NodoRetornar(NodoAST):
     valor: Optional[NodoAST] = None
 
 @dataclass
+class NodoIntentar(NodoAST):
+    cuerpo: NodoBloque = None
+    capturas: List[tuple] = field(default_factory=list) # [(nombre, tipo, bloque)]
+    finalmente: Optional[NodoBloque] = None
+
+@dataclass
+class NodoLanzar(NodoAST):
+    excepcion: NodoAST = None
+
+@dataclass
+class NodoImportar(NodoAST):
+    modulo: str = ""
+    objetivos: List[str] = field(default_factory=list)
+
+@dataclass
 class NodoExpresionSentencia(NodoAST):
     valor: NodoAST = None
 

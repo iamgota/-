@@ -47,8 +47,33 @@ class Parser:
             return self.parsear_decl_funcion()
         if self._coincide(TokenKind.KW_SINF):
             return self.parsear_decl_clase()
+        if self._coincide(TokenKind.KW_ISTAWRED):
+            return self.parsear_sent_importar()
             
         return self.parsear_sentencia()
+
+    def parsear_sent_importar(self) -> NodoImportar:
+        t = self._consumir(TokenKind.KW_ISTAWRED)
+        objetivos = []
+        # Handle `استورد جذر, pi من رياضيات` or `استورد رياضيات`
+        # PRD example:
+        # استورد رياضيات
+        # استورد رياضيات كـ ر
+        # استورد جذر, pi من رياضيات
+        
+        # We will simplify for now, standard import syntax.
+        obj = self._consumir(TokenKind.IDENTIFICADOR).valor
+        objetivos.append(obj)
+        while self._coincide(TokenKind.PUNT_COMA):
+            self._avanzar()
+            objetivos.append(self._consumir(TokenKind.IDENTIFICADOR).valor)
+        
+        modulo = objetivos[0] if len(objetivos) == 1 else "" # Simplified
+        if self._coincide(TokenKind.IDENTIFICADOR) and self.token_actual.valor == "من":
+            self._consumir(TokenKind.IDENTIFICADOR)
+            modulo = self._consumir(TokenKind.IDENTIFICADOR).valor
+            
+        return NodoImportar(linea=t.linea, columna=t.columna, modulo=modulo, objetivos=objetivos)
 
     def parsear_sentencia(self) -> NodoAST:
         if self._coincide(TokenKind.KW_AZDA):
@@ -61,6 +86,10 @@ class Parser:
             return self.parsear_sent_repetir()
         if self._coincide(TokenKind.KW_IRJAH):
             return self.parsear_sent_retornar()
+        if self._coincide(TokenKind.KW_HAWAL):
+            return self.parsear_sent_intentar()
+        if self._coincide(TokenKind.KW_ARMI):
+            return self.parsear_sent_lanzar()
         if self._coincide(TokenKind.PUNT_LLAVE_IZQ):
             return self.parsear_bloque()
             
@@ -193,14 +222,17 @@ class Parser:
         return NodoBucle_ParaCada(linea=t.linea, columna=t.columna, variable=var_id, iterable=iterable, cuerpo=cuerpo)
         
     def parsear_sent_repetir(self) -> NodoBucle_Repetir:
-        # كرر من 0 حتى ن { }
+        # كرر ر من 0 حتى ن { }
         t = self._consumir(TokenKind.KW_KARRIR)
-        ident_min = self._consumir(TokenKind.IDENTIFICADOR) # should be "من"
+        var_id = "ر"
+        if self._coincide(TokenKind.IDENTIFICADOR):
+            var_id = self._consumir(TokenKind.IDENTIFICADOR).valor
+        self._consumir(TokenKind.KW_MIN)
         inicio = self.parsear_expresion()
-        ident_hatta = self._consumir(TokenKind.IDENTIFICADOR) # should be "حتى"
+        self._consumir(TokenKind.KW_HATTA)
         fin = self.parsear_expresion()
         cuerpo = self.parsear_bloque()
-        return NodoBucle_Repetir(linea=t.linea, columna=t.columna, variable="ر", inicio=inicio, fin=fin, cuerpo=cuerpo)
+        return NodoBucle_Repetir(linea=t.linea, columna=t.columna, variable=var_id, inicio=inicio, fin=fin, cuerpo=cuerpo)
 
     def parsear_sent_retornar(self) -> NodoRetornar:
         t = self._consumir(TokenKind.KW_IRJAH)
@@ -208,6 +240,36 @@ class Parser:
         if not self._coincide(TokenKind.PUNT_LLAVE_DER, TokenKind.FIN_ARCHIVO):
             valor = self.parsear_expresion()
         return NodoRetornar(linea=t.linea, columna=t.columna, valor=valor)
+
+    def parsear_sent_intentar(self) -> NodoIntentar:
+        t = self._consumir(TokenKind.KW_HAWAL)
+        cuerpo = self.parsear_bloque()
+        capturas = []
+        while self._coincide(TokenKind.KW_ILTAQIT):
+            t_cap = self._consumir(TokenKind.KW_ILTAQIT)
+            self._consumir(TokenKind.PUNT_PAREN_IZQ)
+            nombre = self._consumir(TokenKind.IDENTIFICADOR).valor
+            tipo = None
+            if self._coincide(TokenKind.PUNT_DOS_PUNTOS):
+                self._avanzar()
+                tipo = self._consumir(TokenKind.IDENTIFICADOR).valor
+            self._consumir(TokenKind.PUNT_PAREN_DER)
+            bloq_cap = self.parsear_bloque()
+            capturas.append((nombre, tipo, bloq_cap))
+            
+        finalmente = None
+        if self._coincide(TokenKind.KW_AKHIRAN):
+            self._avanzar()
+            finalmente = self.parsear_bloque()
+            
+        return NodoIntentar(linea=t.linea, columna=t.columna, cuerpo=cuerpo, capturas=capturas, finalmente=finalmente)
+
+    def parsear_sent_lanzar(self) -> NodoLanzar:
+        t = self._consumir(TokenKind.KW_ARMI)
+        self._consumir(TokenKind.PUNT_PAREN_IZQ)
+        expr = self.parsear_expresion()
+        self._consumir(TokenKind.PUNT_PAREN_DER)
+        return NodoLanzar(linea=t.linea, columna=t.columna, excepcion=expr)
 
     # --- Expresiones ---
     # Precedence: (lowest) Asignacion -> OR -> AND -> Igualdad -> Comparacion -> Adicion -> Mult -> Unario -> Postfijo -> Primario (highest)

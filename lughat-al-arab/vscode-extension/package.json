@@ -3,6 +3,11 @@
     "displayName": "Lughat Al-Arab",
     "description": "Soporte para el lenguaje de programación Lughat Al-Arab",
     "publisher": "lughat-al-arab-team",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/example/lughat-al-arab"
+    },
+    "license": "MIT",
     "version": "1.0.0",
     "engines": {
         "vscode": "^1.80.0"
